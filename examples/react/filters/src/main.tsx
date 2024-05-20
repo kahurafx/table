@@ -28,9 +28,7 @@ declare module '@tanstack/react-table' {
 function App() {
   const rerender = React.useReducer(() => ({}), {})[1]
 
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
 
   const columns = React.useMemo<ColumnDef<Person, any>[]>(
     () => [
@@ -243,6 +241,7 @@ function App() {
 }
 
 function Filter({ column }: { column: Column<any, unknown> }) {
+  
   const columnFilterValue = column.getFilterValue()
   const { filterVariant } = column.columnDef.meta ?? {}
 
@@ -252,7 +251,8 @@ function Filter({ column }: { column: Column<any, unknown> }) {
         {/* See faceted column filters example for min max values functionality */}
         <DebouncedInput
           type="number"
-          value={(columnFilterValue as [number, number])?.[0] ?? ''}
+          value={(columnFilterValue as [number, number])?.[0] ?? ''} 
+          // This sets the columnFIlterValue as an array of two numbers, checks whether it is nullish/null, if it is null it returns an empty string. If not render it's the first value in the array
           onChange={value =>
             column.setFilterValue((old: [number, number]) => [value, old?.[1]])
           }
@@ -261,7 +261,7 @@ function Filter({ column }: { column: Column<any, unknown> }) {
         />
         <DebouncedInput
           type="number"
-          value={(columnFilterValue as [number, number])?.[1] ?? ''}
+          value={(columnFilterValue as [number, number])?.[1] ?? ''}  
           onChange={value =>
             column.setFilterValue((old: [number, number]) => [old?.[0], value])
           }
